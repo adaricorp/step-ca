@@ -1,0 +1,50 @@
+---
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build debian package
+    runs-on: ubuntu-latest
+    environment:
+      name: "release"
+    strategy:
+      matrix:
+        target: ["ubuntu:22.04"]
+        arch: ["amd64", "arm64"]
+    container:
+      image: "${{ matrix.target }}"
+    env:
+        ARCH: ${{ matrix.arch }}
+    steps:
+      - name: Install git
+        run: |
+          apt-get update
+          apt-get -y install git
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Build debian packages
+        run: ./build.sh
+
+      - name: Stash debian packages
+        run: |
+          packages_dir="${GITHUB_WORKSPACE}/packages/any-distro_any-version/"
+          mkdir -p "${packages_dir}"
+          mv -v "${GITHUB_WORKSPACE}"/*.deb "${packages_dir}"
+
+      - name: Publish debian packages to cloudsmith
+        uses: wandnz/action-cloudsmith-upload-packages@v1
+        with:
+          path: packages/
+          repo: adaricorp/step-ca
+          username:  github-actions-stepca
+          api_key: ${{ secrets.CLOUDSMITH_API_KEY }}

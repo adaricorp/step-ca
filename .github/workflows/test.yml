@@ -1,0 +1,34 @@
+---
+name: Tests
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  build:
+    name: Build debian package
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target: ["ubuntu:22.04"]
+        arch: ["amd64", "arm64"]
+    container:
+      image: "${{ matrix.target }}"
+    env:
+        ARCH: ${{ matrix.arch }}
+    steps:
+      - name: Install git
+        run: |
+          apt-get update
+          apt-get -y install git
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Build debian packages
+        run: ./build.sh

@@ -1,0 +1,6 @@
+[submodule "cli"]
+	path = cli
+	url = https://github.com/smallstep/cli
+[submodule "certificates"]
+	path = certificates
+	url = https://github.com/smallstep/certificates
