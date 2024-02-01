@@ -27,7 +27,7 @@ jobs:
         shell: bash
         run: |
           git submodule foreach \
-          'git checkout "tags/$(git describe $(git rev-list --tags --max-count=1))"'
+          'git checkout "tags/$(git describe --tags $(git rev-list --tags --max-count=1))"'
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v5
