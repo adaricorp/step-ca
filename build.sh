@@ -2,6 +2,11 @@
 
 set -euo pipefail
 
+declare -A package_names=(
+    ["certificates"]="step-ca"
+    ["cli"]="step-cli"
+)
+
 arch="${ARCH}"
 
 set -x
@@ -15,7 +20,7 @@ while read -r dir; do
 
         repo="$(basename "${dir}")"
         tag="$(git describe --tags)"
-        package_name="$(grep package_name ./.goreleaser.yml | awk '{print $2}')"
+        package_name="${package_names[${repo}]}"
 
         curl -fsSL \
             "https://github.com/smallstep/${repo}/releases/download/${tag}/${package_name}_${arch}.deb" \
