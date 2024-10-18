@@ -47,7 +47,6 @@ jobs:
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
-          owner: adaricorp
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v7
