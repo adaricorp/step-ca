@@ -17,7 +17,7 @@ jobs:
     container:
       image: "${{ matrix.target }}"
     env:
-        ARCH: ${{ matrix.arch }}
+      ARCH: ${{ matrix.arch }}
     steps:
       - name: Install git
         run: |
@@ -32,3 +32,9 @@ jobs:
 
       - name: Build debian packages
         run: ./build.sh
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: "step-ca-${{ matrix.arch }}-packages"
+          path: "*.deb"
