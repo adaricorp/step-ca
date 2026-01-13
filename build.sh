@@ -24,6 +24,6 @@ while read -r dir; do
 
         curl -fsSL \
             "https://github.com/smallstep/${repo}/releases/download/${tag}/${package_name}_${arch}.deb" \
-            -o "../${package_name}_${arch}.deb"
+            -o "../${package_name}_${tag}_${arch}.deb"
     )
 done <<< "$(find . -mindepth 1 -maxdepth 1 -type d -not -path '*/.*')"
